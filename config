@@ -1,0 +1,36 @@
+PasswordAuthentication no
+StrictHostKeyChecking no
+
+Host devA
+    HostName 10.1.0.75
+    Port 22
+    User ubuntu
+    IdentityFile /root/.ssh/keypair
+    ProxyJump bastionNSO
+
+Host devB
+    HostName 10.1.0.124
+    Port 22
+    User ubuntu
+    IdentityFile /root/.ssh/keypair
+    ProxyJump bastionNSO
+
+Host devC
+    HostName 10.1.0.182
+    Port 22
+    User ubuntu
+    IdentityFile /root/.ssh/keypair
+    ProxyJump bastionNSO
+
+Host HAproxy
+    HostName 10.1.0.42
+    Port 22
+    User ubuntu
+    IdentityFile /root/.ssh/keypair
+    ProxyJump bastionNSO
+
+Host bastionNSO
+    HostName 188.95.227.120
+    Port 22
+    User ubuntu
+    IdentityFile /root/.ssh/keypair
