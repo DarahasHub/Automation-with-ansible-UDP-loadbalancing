@@ -2,11 +2,40 @@
 ---
 - hosts: all
   become: yes
+
   tasks:
+
   - name: installing pip3
     apt: name=python3-pip state=latest
+
   - name: installing flask module
     pip: name=flask state=latest
+
   - name: run flask app
     shell: |
       nohup python3 /home/ubuntu/application.py > log.txt 2>&1 &curl http://localhost:6000
+
+  - name: Install snmpd package
+    apt: name=snmpd state=latest
+
+  - name: Configure SNMP v2c Community
+    lineinfile:
+      path: /etc/snmp/snmpd.conf
+      regexp: 'rocommunity  public default -V systemonly'
+      line: 'rocommunity public 10.1.0.0/24'
+      backrefs: true
+    become: true
+
+  - name: Configure agentAdress
+    lineinfile:
+      path: /etc/snmp/snmpd.conf
+      line: 'agentAddress udp:161,udp6:[::1]:161'
+      insertafter: 'agentaddress  127.0.0.1,[::1]'
+
+  - name: Enable snmpd service
+    service: name=snmpd enabled=yes
+    notify: Restart snmpd
+
+  handlers:
+  - name: Restart snmpd
+    action: service name=snmpd state=restarted
